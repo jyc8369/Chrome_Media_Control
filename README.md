@@ -1,5 +1,100 @@
 # Chrome Media Control
 
+[English](#english) | [한국어](#korean)
+
+<a name="english"></a>
+
+## English
+
+Chrome Media Control is a Manifest V3 extension that exposes YouTube and YouTube Music playback state through a local REST API and routes API commands to the active media tab.
+
+> This project is local-only. The backend binds to `127.0.0.1` and is not intended to be exposed to the Internet or a LAN.
+
+### Features
+
+- Read playback state from YouTube and YouTube Music
+- Play, pause, toggle, previous, and next controls
+- Read recommendations and select an item
+- Track command requests with `requestId` and execution results
+- Keep an independent Primary tab for each media source
+- Restore tab selection after a service-worker restart during the current Chrome session
+- Reconnect the backend WebSocket with exponential backoff
+
+### Architecture
+
+```mermaid
+flowchart LR
+    YT[YouTube / YouTube Music] <--> CS[Content script]
+    CS <--> SW[Service worker]
+    SW <--> OD[Offscreen document]
+    OD <-->|WebSocket| API[Local API backend]
+    CLIENT[Stream Deck / CLI / Local client] <-->|REST| API
+```
+
+### Quick start
+
+Requirements: Node.js, npm, a recent Chrome version that supports Manifest V3, and a YouTube or YouTube Music tab.
+
+```powershell
+npm install
+npm run build
+npm run start:backend
+```
+
+Then open `chrome://extensions`, enable Developer mode, load the `dist` directory as an unpacked extension, and reload the YouTube tab.
+
+The default API address is `http://127.0.0.1:17832`.
+
+### Multi-tab routing
+
+YouTube and YouTube Music each keep one independent Primary tab. The last media tab activated by the user becomes Primary. Background heartbeat messages do not change the selection. State, recommendations, and commands are routed only through the selected tab. If it disappears, the extension falls back to a valid candidate and publishes an unavailable state when no candidate remains.
+
+### REST API
+
+The API is available at `http://127.0.0.1:17832`.
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/v1/health` | Server and extension health |
+| `GET` | `/api/v1/states/{source}` | Latest player state |
+| `GET` | `/api/v1/recommendations/{source}` | Latest recommendations |
+| `POST` | `/api/v1/commands` | Create a player command |
+| `POST` | `/api/v1/recommendations/select` | Select a recommendation |
+| `GET` | `/api/v1/commands/{requestId}` | Read command status |
+
+Supported sources are `youtube` and `youtube_music`. The detailed request and response examples are documented in the Korean section below.
+
+### Security
+
+- The backend binds only to IPv4 loopback `127.0.0.1`.
+- Non-loopback HTTP hosts and unsupported browser origins are rejected.
+- No authentication is provided for trusted local programs.
+- Do not expose the port through a reverse proxy, tunnel, or port forwarding.
+
+### Development
+
+```powershell
+npm run typecheck
+npm test
+npm run build
+```
+
+### Limitations
+
+- YouTube DOM changes may require maintenance of the content script.
+- Chrome-based browsers other than Chrome have not been separately verified.
+- Backend state and command history are held in memory and reset on restart.
+
+### License
+
+GPL-3.0-or-later. See [LICENSE](LICENSE).
+
+---
+
+<a name="korean"></a>
+
+# Chrome Media Control
+
 YouTube와 YouTube Music의 재생 상태를 로컬 REST API로 제공하고, API 명령을 Chrome 탭의 실제 플레이어 동작으로 연결하는 Manifest V3 확장 프로그램입니다.
 
 > 이 프로젝트는 `127.0.0.1` 전용입니다. 인터넷이나 LAN에 노출되는 원격 제어 서버를 목표로 하지 않습니다.
