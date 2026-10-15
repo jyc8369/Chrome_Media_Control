@@ -1,7 +1,7 @@
 {
   "name": "chrome-media-control-chrome",
   "private": true,
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "scripts": {
     "build": "npm run build:extension && npm run build:backend",
     "build:extension": "vite build",
