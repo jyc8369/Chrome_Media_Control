@@ -87,7 +87,7 @@ npm run build
 
 ### License
 
-GPL-3.0-or-later. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). The MIT license covers this project's original source code; third-party trademarks and service content, including YouTube and YouTube Music, remain the property of their respective owners.
 
 ---
 
@@ -392,6 +392,6 @@ npm run build
 
 ## 라이선스
 
-이 프로젝트는 **GNU General Public License v3.0 or later**(`GPL-3.0-or-later`)로 배포됩니다.
+이 프로젝트의 자체 구현 소스 코드는 **MIT 라이선스**(`MIT`)로 배포됩니다.
 
-프로그램을 수정하거나 배포할 때는 GPL-3.0 또는 Free Software Foundation이 발표한 이후 버전의 조건을 선택하여 적용하고, 대응하는 소스 코드를 제공해야 합니다. 자세한 내용은 [LICENSE](LICENSE)를 확인하세요.
+저작권 및 MIT 라이선스 고지를 유지하는 조건으로 소스 코드를 사용·수정·배포할 수 있습니다. 자세한 내용은 [LICENSE](LICENSE)를 확인하세요. YouTube 및 YouTube Music을 비롯한 제3자 상표와 서비스 콘텐츠의 권리는 각 권리자에게 있습니다.
